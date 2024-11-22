@@ -3,7 +3,7 @@ import { readFileSync } from 'node:fs';
 /**
    * @test reads from the test input file. Defaults to false.
    * @id selects a specific number test input file. Defaults to 0.
-   * @headerLenght removes provided number of  header lines from input. Default 0.
+   * @headerLength removes provided number of  header lines from input. Default 0.
    * @separator string used to separate chunks of input. Default to '\r\n'
    */
 export interface InputReadOptions {
