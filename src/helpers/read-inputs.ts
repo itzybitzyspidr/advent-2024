@@ -4,13 +4,15 @@ import { readFileSync } from 'node:fs';
    * @test reads from the test input file. Defaults to false.
    * @id selects a specific number test input file. Defaults to 0.
    * @headerLength removes provided number of  header lines from input. Default 0.
-   * @separator string used to separate chunks of input. Default to '\r\n'
+   * @separator string used to separate chunks of input. Default to '\n'.
+   * @lineEnding used to split newlines without using '\n'.
    */
 export interface InputReadOptions {
   test?: boolean;
   id?: number;
   headerLength?: number;
   separator?: string;
+  lineEnding?: string;
 }
 
 export interface ReadOutput {
@@ -31,10 +33,18 @@ function readInput(day: number, options?: InputReadOptions): string {
   return readFileSync(path).toString().trim();
 }
 
+export function getInputAsString(day: number, options?: InputReadOptions): string {
+  const readOutput = getInputAsChunks(day, {
+    ...options,
+    separator: 'THISISASEPARATORTHATWONTCOMEUP',
+  });
+  return readOutput.body[0];
+}
+
 export function getInputAsLines(day: number, options?: InputReadOptions): ReadOutput {
   return getInputAsChunks(day, {
     ...options,
-    separator: '\r\n',
+    separator: options?.lineEnding ?? '\n',
   });
 }
 
