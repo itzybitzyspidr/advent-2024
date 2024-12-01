@@ -39,7 +39,7 @@ function createGateMap(lines: string[]): Map<string, IGate> {
     }
 
     const sendingGateIds = source.match(/[a-z]+/g);
-    const inputValues = source.match(/[0-9]+/);
+    const inputValues = source.match(/[0-9]+/g);
 
     const destinationGate: IGate = {
       id: destination,
@@ -84,17 +84,21 @@ function evalutateGate(id: string, gateMap: Map<string, IGate>): number {
         v = v & value;
       }
       break;
+
     case Operator.OR:
       for (const value of [...incomingValues, ...rawInputs]) {
         v = v | value;
       }
       break;
+
     case Operator.LSHIFT:
       v = incomingValues[0] << gate.rawInputs[0];
       break;
+
     case Operator.RSHIFT:
       v = incomingValues[0] >> gate.rawInputs[0];
       break;
+
     case Operator.NOT:
       if (incomingValues.length > 0) {
         v = ~incomingValues[0];
@@ -102,16 +106,16 @@ function evalutateGate(id: string, gateMap: Map<string, IGate>): number {
         v = ~rawInputs[0];
       }
       break;
+
     case Operator.PASS:
       if (incomingValues.length > 0) {
         v = incomingValues[0];
       } else {
         v = rawInputs[0];
       }
-
       break;
-    default:
-      throw new Error(`Uncaught operator: ${gate.operator}`);
+
+    default: throw new Error(`Uncaught operator: ${gate.operator}`);
   }
 
   gate.calculatedValue = v;
