@@ -1,59 +1,43 @@
 import { sortBy } from "../../helpers/algorithms";
+import { countEntries } from "../../helpers/mappers";
+import { getPairDistance } from "../../helpers/math";
 import { getInputAsLines } from "../../helpers/read-inputs";
+import { getMatches } from "../../helpers/search";
+
+interface IListPair {
+  left: number;
+  right: number;
+}
 
 export function y2024d1p1(): number {
   const lines = getInputAsLines(1).body;
-  const left: number[] = [];
-  const right: number[] = [];
-  for (const line of lines) {
-    const matches = line.match(/[\d]+/g);
-    if (!matches || matches.length < 2) {
-      throw new Error(`Couldn't read 2 inputs from line: ${line}.`);
-    }
-    left.push(+matches[0]);
-    right.push(+matches[1]);
-  }
+  const regEx = /[\d]+/g;
+  const matches = lines.map((line) => getMatches(line, regEx, { expectedResultLength: 2 }));
 
-  const sortedLeft = sortBy(left);
-  const sortedRight = sortBy(right);
+  const [left, right] = [matches.map((arr) => arr[0]), matches.map((arr) => arr[1])];
 
-  if (sortedLeft.length !== sortedRight.length) {
-    throw new Error(`Left list length: ${sortedLeft.length} was different from Right list length: ${sortedRight.length}.`);
-  }
+  const sortedPairs: number[][] = sortBy(left.map((v) => +v)).map((v, i) => {
+    return [+v, sortBy(right.map((v) => +v))[i]];
+  });
 
-  let totalDistance = 0;
-  for (let i = 0; i < sortedLeft.length; i++) {
-    totalDistance += Math.abs(sortedLeft[i] - sortedRight[i]);
-  }
-
-  return totalDistance;
+  return sortedPairs.reduce((prev, cur) => prev += getPairDistance(cur[0], cur[1]), 0);
 } 
 
 export function y2024d1p2(): number {
   const lines = getInputAsLines(1).body;
+  const regEx = /[\d]+/g;
+  const matches = lines.map((line) => getMatches(line, regEx, { expectedResultLength: 2 }));
 
-  const leftCounts = new Map<number, number>();
-  const rightCounts = new Map<number, number>();
+  const [left, right] = [matches.map((arr) => arr[0]), matches.map((arr) => arr[1])];
 
-  for (const line of lines) {
-    const matches = line.match(/[\d]+/g);
-    if (!matches || matches.length < 2) {
-      throw new Error(`Couldn't read 2 inputs from line: ${line}.`);
-    }
-    const leftCount =  leftCounts.get(+matches[0]) || 0;
-    leftCounts.set(+matches[0], leftCount + 1);
-
-    const rightCount =  rightCounts.get(+matches[1]) || 0;
-    rightCounts.set(+matches[1], rightCount + 1);
-  }
-
-  console.log(rightCounts);
+  const leftCounts = countEntries(left);
+  const rightCounts = countEntries(right);
 
   let totalSimilarity = 0;
   for (const [key, count] of leftCounts.entries()) {
     const rightCount = rightCounts.get(key);
     if (rightCount) {
-      totalSimilarity += count * key * rightCount;
+      totalSimilarity += count * +key * rightCount;
     }
   }
 
