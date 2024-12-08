@@ -4,10 +4,6 @@ import { getPairDistance } from "../../helpers/math";
 import { getInputAsLines } from "../../helpers/read-inputs";
 import { getMatches } from "../../helpers/search";
 
-interface IListPair {
-  left: number;
-  right: number;
-}
 
 export function y2024d1p1(): number {
   const lines = getInputAsLines(1).body;
