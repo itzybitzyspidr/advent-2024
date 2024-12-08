@@ -16,8 +16,13 @@ export interface InputReadOptions {
 }
 
 export interface ReadOutput {
-  header: string[],
-  body: string[],
+  header: string[];
+  body: string[];
+}
+
+export interface ReadOutputGrid {
+  header: string[];
+  body: string[][];
 }
 
 function readInput(day: number, options?: InputReadOptions): string {
@@ -68,4 +73,14 @@ export function getInputAsChunks(day: number, options?: InputReadOptions): ReadO
 
   output.body = input.split(options?.separator ? options.separator : '\r\n');
   return output;
+}
+
+export function getInputAsGrid(day: number, options?: InputReadOptions): ReadOutputGrid {
+  const readOutput = getInputAsLines(day, options);
+  const res: ReadOutputGrid = {
+    header: readOutput.header,
+    body: readOutput.body.map((line) => line.split('')),
+  }
+
+  return res;
 }

@@ -1,9 +1,10 @@
 import { program } from "commander";
 import { y2024d8p2 } from "./solutions/day8/solution";
+import { getInputAsGrid } from "./helpers/read-inputs";
 
 
 program.action(() => {
-  console.log(`Part 2: ${y2024d8p2()}`);
+  console.log(getInputAsGrid(8).body);
 });
 
 program.parse();

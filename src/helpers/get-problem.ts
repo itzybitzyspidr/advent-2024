@@ -54,8 +54,15 @@ export async function createInputFile(year: number, day: number, options?: IInpu
 }
 
 export async function createInputFileCLI(): Promise<void> {
-  const cliResponse = await askForProblemDetails();
-  createInputFile(cliResponse.year, cliResponse.day, { replace: cliResponse.replace });
+  const args = process.argv.slice(2);
+  const day = args.find((arg) => arg.includes('day'));
+  if (day === undefined) {
+    const cliResponse = await askForProblemDetails();
+    createInputFile(cliResponse.year, cliResponse.day, { replace: cliResponse.replace });
+  }
+  else {
+    createInputFile(2024, +(day.split('=')[1]), { replace: true} );
+  }
 }
 
 async function askForProblemDetails(): Promise<ICLIResponse> {
