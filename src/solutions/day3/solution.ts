@@ -21,7 +21,6 @@ export function y2024d3p2(): number {
   let enabled = true;
   let tot = 0;
   while (idx < input.length) {
-    console.log(idx)
     if (enabled) {
       const nextInstruction = mulOrDontRegex.exec(input.slice(idx));
 
