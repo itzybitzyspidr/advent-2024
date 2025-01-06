@@ -1,9 +1,9 @@
 import { program } from "commander";
-import { y2024d13p1, y2024d13p2 } from "./solutions/day13/solution";
-import { y2024d14p1 } from "./solutions/day14/solution";
+import { y2024d16p1 } from "./solutions/day16/solution";
+import { y2024d16p2 } from "./solutions/day16/solution2";
 
-program.action(async () => {
-  await y2024d14p1();
+program.action(() => {
+  console.log(y2024d16p2());
 });
 
 program.parse();
