@@ -1,9 +1,8 @@
 import { program } from "commander";
-import { y2024d16p1 } from "./solutions/day16/solution";
-import { y2024d16p2 } from "./solutions/day16/solution2";
+import { y2024d17p1, y2024d17p2 } from "./solutions/day17/solution";
 
 program.action(() => {
-  console.log(y2024d16p2());
+  console.log(y2024d17p2());
 });
 
 program.parse();
