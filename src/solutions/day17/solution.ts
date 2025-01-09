@@ -1,11 +1,3 @@
-/**
- * Op Code time
- * Literal Operands are just the number of the operand
-
- * 
- * 8 Instructions
- */
-
 import { getInputAsLines } from "../../helpers/read-inputs";
 
 interface IProgramState {
@@ -39,26 +31,44 @@ export function y2024d17p1(): string {
 
 export function y2024d17p2(): number {
   const input = getInputAsLines(17).body;
-  
-  for (let i = 0; i < 20000; i++) {
-    const program = initializeProgram(input, i);
+
+  const testProgram = initializeProgram(input);
+  let solution = Math.pow(8,15);
+  let power = 15;
+  while (power >= 0) {
+    const program = initializeProgram(input, solution);
     let operation = readOperation(program);
     while (!operation.end) {
-        runOperation(program, operation);
-        operation = readOperation(program);
-      }
-
-    if (program.output[0] === 2 && program.output[1] === 4 && program.output[2] === 1) {
-      console.log(program);
-      console.log(i);
+      runOperation(program, operation);
+      operation = readOperation(program);
     }
+    if (solution === Math.pow(8,15)) {
+      console.log(`===INITIAL===`);
+      console.log(`Out: ${program.output}`);
+      console.log(`Ins: ${program.instructions}`);
+    } else {
+      console.log(`Out: ${program.output}`);
+      console.log(`Ins: ${program.instructions}`);
+      console.log('');
+    }
+
     if (outputMatchesInstructions(program)) {
       console.log(program);
-      return i;
+      return solution;
+    }
+
+    // Check nth last digit of output.
+    if (program.output[power] === program.instructions[power]) {
+      console.log(`Matched ${power}. ${program.output[power]} === ${program.instructions[power]}`);
+      console.log(`Out: ${program.output}`);
+      console.log(`Ins: ${program.instructions}`);
+      power--;
+    } else {
+      solution += Math.ceil(Math.pow(8, power - 2));
+      console.log(`===ADDED 8 ** ${power - 2}===`);
     }
   }
-
-  throw new Error(`Couldn't find valid value for register A after 1 Billion programs.`);
+  throw new Error(`Never got there chief.`);
 }
 
 function initializeProgram(input: string[], part2?: number): IProgramState {
@@ -110,7 +120,7 @@ function runOperation(program: IProgramState, operation: IOperation): void {
       program.registerA = Math.floor(program.registerA / Math.pow(2, getComboOperand(operation.operand, program)));
       break;
     case 1:
-      program.registerB = program.registerB ^ operation.operand;
+      program.registerB = Number(BigInt(program.registerB) ^ BigInt(operation.operand));
       break;
     case 2:
       program.registerB = getComboOperand(operation.operand, program) % 8;
@@ -121,7 +131,7 @@ function runOperation(program: IProgramState, operation: IOperation): void {
       }
       break;
     case 4:
-      program.registerB = program.registerB ^ program.registerC;
+      program.registerB = Number(BigInt(program.registerB) ^ BigInt(program.registerC));
       break;
     case 5:
       program.output.push(getComboOperand(operation.operand, program) % 8);
@@ -169,11 +179,10 @@ function outputMatchesInstructions(program: IProgramState): boolean {
     return false;
   }
 
-  program.instructions.forEach((v, i) => {
-    if (program.output[i] !== v) {
+  for (let i = 0; i < program.instructions.length; i++) {
+    if (program.output[i] !== program.instructions[i]) {
       return false;
     }
-  });
-
+  }
   return true;
 }

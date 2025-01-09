@@ -64,14 +64,14 @@ export function getInputAsChunks(day: number, options?: InputReadOptions): ReadO
   if (options?.headerLength) {
     let newLineIndex = 0;
     for (let i = 0; i < options.headerLength; i++) {
-      const endOfLineIndex = input.indexOf('\r\n', newLineIndex);
+      const endOfLineIndex = input.indexOf('\n', newLineIndex);
       output.header.push(input.slice(newLineIndex, endOfLineIndex).trim());
       newLineIndex = endOfLineIndex + 2;
     }
     input = input.slice(newLineIndex);
   }
 
-  output.body = input.split(options?.separator ? options.separator : '\r\n');
+  output.body = input.split(options?.separator ? options.separator : '\n');
   return output;
 }
 
