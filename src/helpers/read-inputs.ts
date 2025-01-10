@@ -66,7 +66,7 @@ export function getInputAsChunks(day: number, options?: InputReadOptions): ReadO
     for (let i = 0; i < options.headerLength; i++) {
       const endOfLineIndex = input.indexOf('\n', newLineIndex);
       output.header.push(input.slice(newLineIndex, endOfLineIndex).trim());
-      newLineIndex = endOfLineIndex + 2;
+      newLineIndex = endOfLineIndex + 1;
     }
     input = input.slice(newLineIndex);
   }
