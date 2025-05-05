@@ -1,8 +1,8 @@
 import { program } from "commander";
-import { y2024d19p1, y2024d19p2 } from "./solutions/day19/solution";
+import { y2024d22p2 } from "./solutions/day22/solution";
 
 program.action(() => {
-  console.log(y2024d19p2());
+  console.log(y2024d22p2());
 });
 
 program.parse();
